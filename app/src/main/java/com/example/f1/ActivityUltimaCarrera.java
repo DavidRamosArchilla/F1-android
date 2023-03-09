@@ -63,6 +63,7 @@ public class ActivityUltimaCarrera extends AppCompatActivity {
                         R.layout.row_layout, filas);
                 listView = (ListView) findViewById(R.id.listview);
                 listView.setAdapter(adaptador);
+
             }
 
             @Override
