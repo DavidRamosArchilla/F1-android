@@ -43,13 +43,6 @@ public class ActivityUltimaCarrera extends AppCompatActivity {
         service = retrofit.create(IF1ApiService.class);
         llamarApi();
     }
-    private List<Rowitem> getRowList(){
-        List<Rowitem> lista_filas = new ArrayList<Rowitem>();
-        for(int i = 0;i<5;i++){
-            lista_filas.add(new Rowitem("Piloto "+ i, i));
-        }
-        return lista_filas;
-    }
     private void llamarApi(){
         Call<JsonObject> callAsync = service.getLastRace();
         Context c = this;
@@ -93,13 +86,5 @@ public class ActivityUltimaCarrera extends AppCompatActivity {
                     piloto.get("points").getAsInt()));
         }
         return listaFilas;
-    }
-
-    private void callback(){
-        List<Rowitem> filas = getRowList();
-        adaptador = new RowArrayAdapter(this,
-                R.layout.row_layout, filas);
-        listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(adaptador);
     }
 }
