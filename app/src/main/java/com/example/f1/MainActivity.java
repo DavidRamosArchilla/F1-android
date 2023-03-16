@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -21,7 +20,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private FirebaseAuth mFirebaseAuth;
+
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             result -> onSignInResult(result)
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mFirebaseAuth = FirebaseAuth.getInstance();
         lanzarLogin();
     }
 
@@ -41,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Toast.makeText(this, "Logueado correctamente", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(this, PantallaInicioActivity.class);
+            startActivity(i);
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the
@@ -60,16 +60,5 @@ public class MainActivity extends AppCompatActivity {
                 .setAvailableProviders(providers)
                 .build();
         signInLauncher.launch(signInIntent);
-    }
-
-    public void abrirUltimaCarrera (View view){
-        Intent myIntent = new Intent(MainActivity.this, ActivityUltimaCarrera.class);
-        startActivity(myIntent);
-    }
-
-    public void logOut(View v) {
-        mFirebaseAuth.signOut();
-        Toast.makeText(this, R.string.signed_out, Toast.LENGTH_SHORT).show();
-        lanzarLogin();
     }
 }
