@@ -1,12 +1,6 @@
 package com.example.f1;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,8 +62,6 @@ public class FragmentUltimaCarrera extends Fragment {
     private View view;
     private ArrayAdapter<Rowitem> adaptador;
     private ListView listView;
-    private static final String API_BASE_URL = "https://ergast.com";
-    private IF1ApiService service;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,52 +70,16 @@ public class FragmentUltimaCarrera extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        service = retrofit.create(IF1ApiService.class);
-        llamarApi();
-
+        Callback<JsonObject> callback = crearCallback();
+        ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(callback);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =inflater.inflate(R.layout.fragment_ultima_carrera, container, false);
+        view = inflater.inflate(R.layout.fragment_ultima_carrera, container, false);
         return view;
-    }
-
-    private void llamarApi() {
-        Call<JsonObject> callAsync = service.getLastRace();
-
-        callAsync.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject respuesta = response.body();
-                List<Rowitem> filas = crearRowItems(respuesta);
-                adaptador = new RowArrayAdapter(getActivity(),
-                        R.layout.row_layout, filas);
-                listView = (ListView) view.findViewById(R.id.listviewfr);
-                listView.setAdapter(adaptador);
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e("error", "error", t);
-                Toast.makeText(
-                        getActivity(),
-                        "ERROR: " + t.getMessage(),
-                        Toast.LENGTH_LONG
-                ).show();
-            }
-        });
     }
 
     private List<Rowitem> crearRowItems(JsonObject respuesta) {
@@ -142,5 +97,29 @@ public class FragmentUltimaCarrera extends Fragment {
                     piloto.get("points").getAsInt()));
         }
         return listaFilas;
+    }
+    private Callback<JsonObject> crearCallback(){
+        return new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject respuesta = response.body();
+                List<Rowitem> filas = crearRowItems(respuesta);
+                if (getActivity()!=null)
+                    adaptador = new RowArrayAdapter(getActivity(),
+                        R.layout.row_layout, filas);
+                listView = (ListView) view.findViewById(R.id.listviewfr);
+                listView.setAdapter(adaptador);
+
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("error", "error", t);
+                Toast.makeText(
+                        getActivity(),
+                        "ERROR: " + t.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        };
     }
 }
