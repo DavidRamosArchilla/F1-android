@@ -2,6 +2,7 @@ package com.example.f1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
     private static final String API_BASE_URL = "https://ergast.com";
     private IF1ApiService service;
     private FirebaseAuth mFirebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,14 +69,12 @@ public class PantallaInicioActivity extends AppCompatActivity {
         return retrofit.create(IF1ApiService.class);
     }
 
-    public void logOut(View v) {
+
+    public void logOut() {
         mFirebaseAuth.signOut();
         Toast.makeText(this, R.string.signed_out, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
     }
-    public void abrirUltimaCarrera (View view){
-        Intent myIntent = new Intent(this, ActivityUltimaCarrera.class);
-        startActivity(myIntent);
-    }
+
 }

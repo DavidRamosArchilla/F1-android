@@ -17,9 +17,6 @@
             android:name=".PantallaInicioActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivityUltimaCarrera"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

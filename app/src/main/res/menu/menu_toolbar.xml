@@ -7,6 +7,5 @@
         android:icon="@drawable/baseline_logout_24"
         android:iconTint="@color/blanco_amarillento"
         android:title="LogOut"
-        app:showAsAction="ifRoom"
-        android:onClick="LogOut"/>
+        app:showAsAction="ifRoom" />
 </menu>
