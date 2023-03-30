@@ -11,7 +11,8 @@ public interface IF1ApiService {
 
     @GET("/api/f1/current/last/results.json")
     Call<JsonObject> getLastRace(); //(@Path("id") long id)
-
+    @GET("api/f1/current/drivers.json")
+    Call<JsonObject> getDrivers();
     @GET("/api/f1/{year}.json")
     Call<JsonObject> getRacesOfYear(@Path("year") String year);
 

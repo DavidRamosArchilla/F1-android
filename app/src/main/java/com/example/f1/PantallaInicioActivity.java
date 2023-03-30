@@ -25,6 +25,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
     private IF1ApiService service;
     private FirebaseAuth mFirebaseAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +36,8 @@ public class PantallaInicioActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         toolbar.setTitle("Clasificación");
-
         setSupportActionBar(toolbar);
+        QuinielaFragment quinielaFragment = new QuinielaFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.frame1, new FragmentClasificacion()).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -51,6 +52,9 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentUltimaCarrera()).commit();
                         toolbar.setTitle("Última Carrera");
                         return true;
+                    case R.id.menu_frag_quiniela:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, quinielaFragment).commit();
+                        toolbar.setTitle("Última Carrera");
                 }
                 return false;
             }

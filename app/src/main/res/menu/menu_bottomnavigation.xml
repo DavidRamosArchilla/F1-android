@@ -17,4 +17,9 @@
         android:icon="@drawable/baseline_flag_24"
         android:iconTint="?attr/colorOnPrimary"
         tools:ignore="MenuTitle"/>
+    <item
+        android:id="@+id/menu_frag_quiniela"
+        android:icon="@drawable/baseline_flag_24"
+        android:iconTint="?attr/colorOnPrimary"
+        tools:ignore="MenuTitle"/>
 </menu>
