@@ -45,7 +45,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentClasificacion()).commit();
                         toolbar.setTitle("Clasificación");
                         return true;
-                    case R.id.menu_frag_ultimaCarrera:
+                    case R.id.menu_frag_LogOut:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentUltimaCarrera()).commit();
                         toolbar.setTitle("Última Carrera");
                         return true;

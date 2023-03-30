@@ -3,15 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_frag_clasificacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_format_list_bulleted_24"
-        android:iconTint="#FFFFFF"
-        android:title="clasificacion" />
-    <item
-        android:id="@+id/menu_frag_ultimaCarrera"
-        android:icon="@drawable/baseline_flag_24"
-        android:iconTint="#FFFFFF"
-        android:title="ultima carrera" />
+        android:id="@+id/menu_frag_LogOut"
+        android:icon="@drawable/baseline_logout_24"
+        android:iconTint="@color/blanco_amarillento"
+        android:title="LogOut"
+        app:showAsAction="ifRoom"
+        android:onClick="LogOut"/>
 </menu>
