@@ -30,6 +30,7 @@ import retrofit2.Response;
 public class QuinielaFragment extends Fragment {
 
     private List<Rowitem> listaPilotos;
+    private RecyclerView recyclerView;
 
     public QuinielaFragment() {
         // Required empty public constructor
@@ -39,8 +40,8 @@ public class QuinielaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Callback<JsonObject> callback = crearCallback();
-        ((PantallaInicioActivity)getActivity()).getService().getDrivers().enqueue(callback);
+
+
     }
 
     @Override
@@ -53,15 +54,9 @@ public class QuinielaFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(listaPilotos);
-        recyclerView.setAdapter(recyclerAdapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        ItemTouchHelper.SimpleCallback simpleCallback = getSimpleCallback();
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        Callback<JsonObject> callback = crearCallback();
+        recyclerView = view.findViewById(R.id.recyclerView);
+        ((PantallaInicioActivity)getActivity()).getService().getDrivers().enqueue(callback);
     }
 
     private ItemTouchHelper.SimpleCallback getSimpleCallback() {
@@ -80,6 +75,7 @@ public class QuinielaFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             }
+
         };
 
     }
@@ -90,6 +86,14 @@ public class QuinielaFragment extends Fragment {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject respuesta = response.body();
                 listaPilotos = crearRowItems(respuesta);
+                RecyclerAdapter recyclerAdapter = new RecyclerAdapter(listaPilotos);
+                recyclerView.setAdapter(recyclerAdapter);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.VERTICAL);
+                recyclerView.addItemDecoration(dividerItemDecoration);
+                ItemTouchHelper.SimpleCallback simpleCallback = getSimpleCallback();
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                itemTouchHelper.attachToRecyclerView(recyclerView);
             }
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {

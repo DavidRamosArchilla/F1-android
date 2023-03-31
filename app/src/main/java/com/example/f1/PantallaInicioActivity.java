@@ -54,7 +54,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_frag_quiniela:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, quinielaFragment).commit();
-                        toolbar.setTitle("Última Carrera");
+                        toolbar.setTitle("Quiniela");
                 }
                 return false;
             }
