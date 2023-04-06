@@ -66,6 +66,8 @@ public class QuinielaFragment extends Fragment {
 
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
+                ((RecyclerAdapter.ViewHolder)viewHolder).cambiarIndice(toPosition);
+                ((RecyclerAdapter.ViewHolder)target).cambiarIndice(fromPosition);
                 Collections.swap(listaPilotos, fromPosition, toPosition);
                 recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
                 return false;

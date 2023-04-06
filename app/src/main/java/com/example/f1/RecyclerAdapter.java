@@ -30,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         holder.nombreTextView.setText(listaPilotos.get(position).getNombrePiloto());
-        holder.numeroTextView.setText(String.valueOf(listaPilotos.get(position).getPutnos()));
+        holder.numeroTextView.setText(String.valueOf(position + 1));
     }
 
     @Override
@@ -52,6 +52,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         @Override
         public void onClick(View view) {
 //            Toast.makeText(view.getContext(), moviesList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+        }
+        public void cambiarIndice(int posicion){
+            numeroTextView.setText(String.valueOf(posicion + 1));
         }
     }
 }
