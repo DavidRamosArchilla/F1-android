@@ -106,24 +106,9 @@ public class QuinielaFragment extends Fragment {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 String fechaUltimaCarrera = getFechaUltimaCarrera(response.body());
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
-                mDatabase.child(idUsuario).child(fechaUltimaCarrera).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        // la fecha esta ya en el fichero de quinielas para el usuario
-                        Toast.makeText(getContext(), "hay una quiniela", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        Toast.makeText(getContext(), "no hay una quiniela", Toast.LENGTH_LONG).show();
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+                mDatabase.child(idUsuario).child(fechaUltimaCarrera)
+                        .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext()));
             }
-
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
 
