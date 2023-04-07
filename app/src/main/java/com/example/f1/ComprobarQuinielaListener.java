@@ -5,23 +5,31 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComprobarQuinielaListener implements ValueEventListener {
     private Context context;
     private JsonObject respuesta;
+    private String idUsuario;
     private final int PUNTUACION_MAXIMA = 400;
     public ComprobarQuinielaListener(Context context, JsonObject respuesta){
         this.context = context;
         this.respuesta = respuesta;
+        this.idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -30,11 +38,19 @@ public class ComprobarQuinielaListener implements ValueEventListener {
             ArrayList<String> quiniela = (ArrayList<String>) dataSnapshot.getValue();
             int puntosQuiniela = calcularPuntosQuiniela(respuesta, quiniela);
             // TODO: borrarla de la base de datos y sumar los puntos en la base de datos
+            sumarPuntosDb(puntosQuiniela);
             Toast.makeText(context, "puntos: " + puntosQuiniela, Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(context, "no hay una quiniela", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sumarPuntosDb(int puntosQuiniela) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/puntos");
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(idUsuario, ServerValue.increment(puntosQuiniela));
+        mDatabase.updateChildren(updates);
     }
 
     private int calcularPuntosQuiniela(JsonObject respuesta, List<String> quiniela) {
