@@ -25,11 +25,13 @@ public class ComprobarQuinielaListener implements ValueEventListener {
     private Context context;
     private JsonObject respuesta;
     private String idUsuario;
+    private String fechaCarrera;
     private final int PUNTUACION_MAXIMA = 400;
-    public ComprobarQuinielaListener(Context context, JsonObject respuesta){
+    public ComprobarQuinielaListener(Context context, JsonObject respuesta, String fechaCarrera){
         this.context = context;
         this.respuesta = respuesta;
         this.idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.fechaCarrera = fechaCarrera;
     }
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -37,13 +39,18 @@ public class ComprobarQuinielaListener implements ValueEventListener {
             // la fecha esta ya en el fichero de quinielas para el usuario
             ArrayList<String> quiniela = (ArrayList<String>) dataSnapshot.getValue();
             int puntosQuiniela = calcularPuntosQuiniela(respuesta, quiniela);
-            // TODO: borrarla de la base de datos y sumar los puntos en la base de datos
             sumarPuntosDb(puntosQuiniela);
+            borrarQuiniela(fechaCarrera);
             Toast.makeText(context, "puntos: " + puntosQuiniela, Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(context, "no hay una quiniela", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void borrarQuiniela(String fechaCarrera) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
+        mDatabase.child(idUsuario).child(fechaCarrera).removeValue();
     }
 
     private void sumarPuntosDb(int puntosQuiniela) {

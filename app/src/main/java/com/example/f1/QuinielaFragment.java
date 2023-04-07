@@ -61,8 +61,7 @@ public class QuinielaFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_quiniela, container, false);
     }
-    // comprobar si hay una quiniela en la base de datos con la fecha de la ultima carrera,
-    // si la hay se le dan puntos (se moestra un mensaje o algo) y se borra de la base de datos
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -84,7 +83,8 @@ public class QuinielaFragment extends Fragment {
             });
         });
     }
-
+    // comprobar si hay una quiniela en la base de datos con la fecha de la ultima carrera,
+    // si la hay se le dan puntos (se moestra un mensaje o algo) y se borra de la base de datos
     private void comprobarUltimaCarrera() {
         ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(new Callback<JsonObject>() {
             @Override
@@ -92,7 +92,7 @@ public class QuinielaFragment extends Fragment {
                 String fechaUltimaCarrera = getFechaUltimaCarrera(response.body());
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
                 mDatabase.child(idUsuario).child(fechaUltimaCarrera)
-                        .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext(), response.body()));
+                        .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext(), response.body(), fechaUltimaCarrera));
             }
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
