@@ -1,5 +1,8 @@
 package com.example.f1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,19 +19,27 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class QuinielaFragment extends Fragment {
-
     private List<Rowitem> listaPilotos;
     private RecyclerView recyclerView;
 
@@ -40,8 +51,6 @@ public class QuinielaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -57,6 +66,53 @@ public class QuinielaFragment extends Fragment {
         Callback<JsonObject> callback = crearCallback();
         recyclerView = view.findViewById(R.id.recyclerView);
         ((PantallaInicioActivity)getActivity()).getService().getDrivers().enqueue(callback);
+        FloatingActionButton btn = view.findViewById(R.id.subirQuiniela);
+        btn.setOnClickListener(v -> {
+            // comprobar si ya se ha hecho una quiniela (SharedPreferences?)
+//            mDatabase.child("id_usuario_2").child("30-04-2023").addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if(dataSnapshot.exists()){
+//                        // la fecha esta ya en el fichero de quinielas para el usuario
+//                    }
+//                    else{
+//
+//                    }
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+            crearDialog((dialog, which) -> {
+                String fechaCarrera = "30-04-2023"; // TODO: hay que obtener la fecha, esto es para el ejemplo
+                String idUsuario = "id_usuario_2"; // igual ^
+                List<String> quiniela = obtenerQuiniela();
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
+//                Map<String,Object> m = new HashMap<>();
+//                m.put("hola", "asd");
+//                mDatabase.setValue(m);
+
+//                mDatabase.child(idUsuario).setValue(fechaCarrera);
+                mDatabase.child(idUsuario).child(fechaCarrera).setValue(quiniela);
+
+            });
+        });
+    }
+
+    private List<String> obtenerQuiniela() {
+        String[] arrayQuiniela = listaPilotos.stream().map(rowitem -> rowitem.getNombrePiloto()).toArray(size -> new String[size]);
+        return Arrays.asList(arrayQuiniela);
+    }
+
+    private void crearDialog(DialogInterface.OnClickListener listenerAceptar) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("¿Esats seguro de que quieres enviar esta quieniela? No podrás enviar otra hasta la siguiente carrera");
+        builder.setPositiveButton("Aceptar", listenerAceptar);
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private ItemTouchHelper.SimpleCallback getSimpleCallback() {
@@ -72,16 +128,12 @@ public class QuinielaFragment extends Fragment {
                 recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
                 return false;
             }
-
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             }
-
         };
-
     }
-
     private Callback<JsonObject> crearCallback(){
         return new Callback<JsonObject>() {
             @Override
