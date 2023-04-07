@@ -75,21 +75,6 @@ public class QuinielaFragment extends Fragment {
         btn.setOnClickListener(v -> {
             // comprobar si ya se ha hecho una quiniela (SharedPreferences?)
             // a lo mejor se puede hacer que se deje acutalizar
-//            mDatabase.child("id_usuario_2").child("30-04-2023").addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if(dataSnapshot.exists()){
-//                        // la fecha esta ya en el fichero de quinielas para el usuario
-//                    }
-//                    else{
-//
-//                    }
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
             crearDialog((dialog, which) -> {
                 String fechaCarrera = "2023-04-02"; // TODO: hay que obtener la fecha, esto es para el ejemplo
                 List<String> quiniela = obtenerQuiniela();
@@ -107,7 +92,7 @@ public class QuinielaFragment extends Fragment {
                 String fechaUltimaCarrera = getFechaUltimaCarrera(response.body());
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
                 mDatabase.child(idUsuario).child(fechaUltimaCarrera)
-                        .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext()));
+                        .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext(), response.body()));
             }
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
@@ -133,7 +118,7 @@ public class QuinielaFragment extends Fragment {
     private void crearDialog(DialogInterface.OnClickListener listenerAceptar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Confirmar acción");
-        builder.setMessage("¿Esats seguro de que quieres enviar esta quieniela? No podrás enviar otra hasta la siguiente carrera");
+        builder.setMessage("¿Estás seguro de que quieres enviar esta quieniela? Si ya has subido una se actualizará");
         builder.setPositiveButton("Aceptar", listenerAceptar);
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
