@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,7 @@ import retrofit2.Response;
 public class QuinielaFragment extends Fragment {
     private List<Rowitem> listaPilotos;
     private RecyclerView recyclerView;
+    private String idUsuario;
 
     public QuinielaFragment() {
         // Required empty public constructor
@@ -59,16 +61,20 @@ public class QuinielaFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_quiniela, container, false);
     }
-
+    // comprobar si hay una quiniela en la base de datos con la fecha de la ultima carrera,
+    // si la hay se le dan puntos (se moestra un mensaje o algo) y se borra de la base de datos
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Callback<JsonObject> callback = crearCallback();
         recyclerView = view.findViewById(R.id.recyclerView);
         ((PantallaInicioActivity)getActivity()).getService().getDrivers().enqueue(callback);
+        idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FloatingActionButton btn = view.findViewById(R.id.subirQuiniela);
+        comprobarUltimaCarrera();
         btn.setOnClickListener(v -> {
             // comprobar si ya se ha hecho una quiniela (SharedPreferences?)
+            // a lo mejor se puede hacer que se deje acutalizar
 //            mDatabase.child("id_usuario_2").child("30-04-2023").addListenerForSingleValueEvent(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -85,19 +91,53 @@ public class QuinielaFragment extends Fragment {
 //                }
 //            });
             crearDialog((dialog, which) -> {
-                String fechaCarrera = "30-04-2023"; // TODO: hay que obtener la fecha, esto es para el ejemplo
-                String idUsuario = "id_usuario_2"; // igual ^
+                String fechaCarrera = "2023-04-02"; // TODO: hay que obtener la fecha, esto es para el ejemplo
                 List<String> quiniela = obtenerQuiniela();
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
-//                Map<String,Object> m = new HashMap<>();
-//                m.put("hola", "asd");
-//                mDatabase.setValue(m);
-
-//                mDatabase.child(idUsuario).setValue(fechaCarrera);
                 mDatabase.child(idUsuario).child(fechaCarrera).setValue(quiniela);
 
             });
         });
+    }
+
+    private void comprobarUltimaCarrera() {
+        ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String fechaUltimaCarrera = getFechaUltimaCarrera(response.body());
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
+                mDatabase.child(idUsuario).child(fechaUltimaCarrera).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        // la fecha esta ya en el fichero de quinielas para el usuario
+                        Toast.makeText(getContext(), "hay una quiniela", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(getContext(), "no hay una quiniela", Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+    private String getFechaUltimaCarrera(JsonObject response) {
+        return response.getAsJsonObject("MRData")
+                .getAsJsonObject("RaceTable")
+                .getAsJsonArray("Races")
+                .get(0)
+                .getAsJsonObject()
+                .get("date")
+                .getAsString();
     }
 
     private List<String> obtenerQuiniela() {
