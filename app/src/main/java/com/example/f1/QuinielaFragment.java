@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,9 +72,8 @@ public class QuinielaFragment extends Fragment {
         idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FloatingActionButton btn = view.findViewById(R.id.subirQuiniela);
         comprobarUltimaCarrera();
+        mostrarPuntos(view);
         btn.setOnClickListener(v -> {
-            // comprobar si ya se ha hecho una quiniela (SharedPreferences?)
-            // a lo mejor se puede hacer que se deje acutalizar
             crearDialog((dialog, which) -> {
                 String fechaCarrera = "2023-04-02"; // TODO: hay que obtener la fecha, esto es para el ejemplo
                 List<String> quiniela = obtenerQuiniela();
@@ -83,6 +83,24 @@ public class QuinielaFragment extends Fragment {
             });
         });
     }
+
+    private void mostrarPuntos(View view) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("puntos/" + idUsuario);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                TextView textViewPuntos = view.findViewById(R.id.textViewPuntosUsuario);
+                String puntos = "Puntos: " + String.valueOf(snapshot.getValue());
+                textViewPuntos.setText(puntos);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     // comprobar si hay una quiniela en la base de datos con la fecha de la ultima carrera,
     // si la hay se le dan puntos (se moestra un mensaje o algo) y se borra de la base de datos
     private void comprobarUltimaCarrera() {

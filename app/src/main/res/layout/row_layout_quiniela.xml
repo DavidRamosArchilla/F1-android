@@ -22,7 +22,7 @@
 
         <!-- Second TextView -->
         <TextView
-            android:id="@+id/textViewPuntos"
+            android:id="@+id/textViewPosicion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewPiloto"

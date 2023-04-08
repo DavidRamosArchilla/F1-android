@@ -44,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(itemView);
 
             nombreTextView = itemView.findViewById(R.id.textViewPiloto);
-            numeroTextView = itemView.findViewById(R.id.textViewPuntos);
+            numeroTextView = itemView.findViewById(R.id.textViewPosicion);
             itemView.setOnClickListener(this);
         }
 

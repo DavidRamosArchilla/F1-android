@@ -27,6 +27,7 @@ public class ComprobarQuinielaListener implements ValueEventListener {
     private String idUsuario;
     private String fechaCarrera;
     private final int PUNTUACION_MAXIMA = 400;
+    private final int PUNTUACION_MINIMA = 200;
     public ComprobarQuinielaListener(Context context, JsonObject respuesta, String fechaCarrera){
         this.context = context;
         this.respuesta = respuesta;
@@ -66,7 +67,7 @@ public class ComprobarQuinielaListener implements ValueEventListener {
         for(int i=0; i<resultadosCarrera.size(); i++){
             error += Math.abs(i - resultadosCarrera.indexOf(quiniela.get(i)));
         }
-        return PUNTUACION_MAXIMA - error;
+        return PUNTUACION_MAXIMA - PUNTUACION_MINIMA - error;
     }
 
     private List<String> obtenerResultadosCarrera(JsonObject respuesta) {
