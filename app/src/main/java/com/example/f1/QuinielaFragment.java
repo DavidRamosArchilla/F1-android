@@ -2,7 +2,7 @@ package com.example.f1;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,9 +33,9 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,13 +75,40 @@ public class QuinielaFragment extends Fragment {
         mostrarPuntos(view);
         btn.setOnClickListener(v -> {
             crearDialog((dialog, which) -> {
-                String fechaCarrera = "2023-04-02"; // TODO: hay que obtener la fecha, esto es para el ejemplo
-                List<String> quiniela = obtenerQuiniela();
-                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
-                mDatabase.child(idUsuario).child(fechaCarrera).setValue(quiniela);
-
+                new Thread(() -> {
+                    CompletableFuture<String> future = obtenerFechaSiguienteCarrera();
+                    String fechaCarrera;
+                    try {
+                        // de esta forma se bloquea el thread hasta que la llamada a la api acaba
+                        fechaCarrera = future.get();
+                    } catch (ExecutionException | InterruptedException e) {
+                        Snackbar.make(view, "No se ha podido obtener datos de la siguiente carrera", Snackbar.LENGTH_LONG).show();
+                        throw new RuntimeException(e);
+                    }
+                    List<String> quiniela = obtenerQuiniela();
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
+                    mDatabase.child(idUsuario).child(fechaCarrera).setValue(quiniela);
+                    Snackbar.make(view, "Se ha enviado correctamente para el: " + fechaCarrera, Snackbar.LENGTH_LONG).show();
+                }).start();
             });
         });
+    }
+
+    private CompletableFuture<String> obtenerFechaSiguienteCarrera() {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        ((PantallaInicioActivity)getActivity()).getService().getNextRace().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                String fecha = getFechaCarrera(response.body());
+                future.complete(fecha);
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                future.completeExceptionally(t);
+            }
+        });
+        return future;
     }
 
     private void mostrarPuntos(View view) {
@@ -107,7 +134,7 @@ public class QuinielaFragment extends Fragment {
         ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                String fechaUltimaCarrera = getFechaUltimaCarrera(response.body());
+                String fechaUltimaCarrera = getFechaCarrera(response.body());
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/quinielas");
                 mDatabase.child(idUsuario).child(fechaUltimaCarrera)
                         .addListenerForSingleValueEvent(new ComprobarQuinielaListener(getContext(), response.body(), fechaUltimaCarrera));
@@ -118,7 +145,7 @@ public class QuinielaFragment extends Fragment {
             }
         });
     }
-    private String getFechaUltimaCarrera(JsonObject response) {
+    private String getFechaCarrera(JsonObject response) {
         return response.getAsJsonObject("MRData")
                 .getAsJsonObject("RaceTable")
                 .getAsJsonArray("Races")
