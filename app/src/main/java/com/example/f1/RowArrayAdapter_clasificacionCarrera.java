@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class RowArrayAdapter extends ArrayAdapter<Rowitem> {
+public class RowArrayAdapter_clasificacionCarrera extends ArrayAdapter<Rowitem_clasificacionCarrera> {
     Context context;
 
-    public RowArrayAdapter(Context context, int resourceId, List<Rowitem> items) {
+    public RowArrayAdapter_clasificacionCarrera(Context context, int resourceId, List<Rowitem_clasificacionCarrera> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -24,12 +24,12 @@ public class RowArrayAdapter extends ArrayAdapter<Rowitem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         RowItemHolder holder = null;
-        Rowitem rowItem = getItem(position);
+        Rowitem_clasificacionCarrera rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_layout, null);
+            convertView = mInflater.inflate(R.layout.row_posicion_carrera, null);
             holder = new RowItemHolder();
 
             holder.piloto = (TextView) convertView.findViewById(R.id.textViewPiloto);

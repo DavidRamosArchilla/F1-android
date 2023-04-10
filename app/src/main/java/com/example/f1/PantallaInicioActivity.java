@@ -3,6 +3,7 @@ package com.example.f1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -51,11 +52,25 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentUltimaCarrera()).commit();
                         toolbar.setTitle("Última Carrera");
                         return true;
+                    case R.id.menu_frag_carreras:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentListaCarreras()).commit();
+                        toolbar.setTitle("Carreras");
+                        return true;
                 }
                 return false;
             }
         });
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+
     public IF1ApiService getService(){
         return service;
     }
@@ -70,11 +85,12 @@ public class PantallaInicioActivity extends AppCompatActivity {
     }
 
 
-    public void logOut() {
+    public boolean logOut(View view) {
         mFirebaseAuth.signOut();
         Toast.makeText(this, R.string.signed_out, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
+        return true;
     }
 
 }
