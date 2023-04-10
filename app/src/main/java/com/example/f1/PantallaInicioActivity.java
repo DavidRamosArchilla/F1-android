@@ -70,6 +70,17 @@ public class PantallaInicioActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_frag_LogOut:
+                logOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public IF1ApiService getService(){
         return service;
@@ -85,7 +96,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
     }
 
 
-    public boolean logOut(View view) {
+    public boolean logOut() {
         mFirebaseAuth.signOut();
         Toast.makeText(this, R.string.signed_out, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, MainActivity.class);
