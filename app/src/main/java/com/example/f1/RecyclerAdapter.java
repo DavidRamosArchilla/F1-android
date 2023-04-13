@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    List<Rowitem> listaPilotos;
+    List<Rowitem_clasificacionCarrera> listaPilotos;
 
-    public RecyclerAdapter(List<Rowitem> listaPilotos) {
+    public RecyclerAdapter(List<Rowitem_clasificacionCarrera> listaPilotos) {
         this.listaPilotos = listaPilotos;
     }
 
