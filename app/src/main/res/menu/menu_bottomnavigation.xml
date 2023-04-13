@@ -18,6 +18,11 @@
         android:iconTint="?attr/colorOnPrimary"
         tools:ignore="MenuTitle"/>
     <item
+        android:id="@+id/menu_frag_carreras"
+        android:icon="@drawable/baseline_directions_car_24"
+        android:iconTint="?attr/colorOnPrimary"
+        tools:ignore="MenuTitle" />
+    <item
         android:id="@+id/menu_frag_quiniela"
         android:icon="@drawable/icono_quiniela"
         android:iconTint="?attr/colorOnPrimary"

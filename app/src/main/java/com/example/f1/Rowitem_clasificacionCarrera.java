@@ -1,10 +1,10 @@
 package com.example.f1;
 
-public class Rowitem {
+public class Rowitem_clasificacionCarrera {
     private String nombrePiloto;
     private int putnos;
 
-    public Rowitem(String nombrePiloto, int putnos) {
+    public Rowitem_clasificacionCarrera(String nombrePiloto, int putnos) {
         this.nombrePiloto = nombrePiloto;
         this.putnos = putnos;
     }
@@ -24,4 +24,6 @@ public class Rowitem {
     public void setPutnos(int putnos) {
         this.putnos = putnos;
     }
+
+
 }

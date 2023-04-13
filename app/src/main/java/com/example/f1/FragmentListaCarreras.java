@@ -1,6 +1,9 @@
 package com.example.f1;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,10 +24,10 @@ import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentUltimaCarrera#newInstance} factory method to
+ * Use the {@link FragmentListaCarreras#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentUltimaCarrera extends Fragment {
+public class FragmentListaCarreras extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +38,7 @@ public class FragmentUltimaCarrera extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FragmentUltimaCarrera() {
+    public FragmentListaCarreras() {
         // Required empty public constructor
     }
 
@@ -47,11 +48,11 @@ public class FragmentUltimaCarrera extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ultimaCarrera.
+     * @return A new instance of fragment FragmentListaCarreras.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentUltimaCarrera newInstance(String param1, String param2) {
-        FragmentUltimaCarrera fragment = new FragmentUltimaCarrera();
+    public static FragmentListaCarreras newInstance(String param1, String param2) {
+        FragmentListaCarreras fragment = new FragmentListaCarreras();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,7 +61,7 @@ public class FragmentUltimaCarrera extends Fragment {
     }
 
     private View view;
-    private ArrayAdapter<Rowitem_clasificacionCarrera> adaptador;
+    private ArrayAdapter<Rowitem_listaCarreras> adaptador;
     private ListView listView;
 
     @Override
@@ -71,30 +72,26 @@ public class FragmentUltimaCarrera extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         Callback<JsonObject> callback = crearCallback();
-        ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(callback);
+        ((PantallaInicioActivity)getActivity()).getService().getRacesOfYear("current").enqueue(callback);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_ultima_carrera, container, false);
+        view = inflater.inflate(R.layout.fragment_lista_carreras, container, false);
         return view;
     }
 
-    private List<Rowitem_clasificacionCarrera> crearRowItems(JsonObject respuesta) {
-        List<Rowitem_clasificacionCarrera> listaFilas = new ArrayList<Rowitem_clasificacionCarrera>();
-        JsonObject carrera = respuesta.getAsJsonObject("MRData")
+    private List<Rowitem_listaCarreras> crearRowItems(JsonObject respuesta) {
+        List<Rowitem_listaCarreras> listaFilas = new ArrayList<Rowitem_listaCarreras>();
+        JsonArray carreras = respuesta.getAsJsonObject("MRData")
                 .getAsJsonObject("RaceTable")
-                .getAsJsonArray("Races")
-                .get(0)
-                .getAsJsonObject();
-        JsonArray resultados = carrera.getAsJsonArray("Results");
-        for(int i = 0; i < resultados.size(); i++){
-            JsonObject piloto = resultados.get(i).getAsJsonObject();
-            JsonObject datosPiloto = piloto.get("Driver").getAsJsonObject();
-            listaFilas.add(new Rowitem_clasificacionCarrera(datosPiloto.get("familyName").getAsString(),
-                    piloto.get("points").getAsInt()));
+                .getAsJsonArray("Races");
+        for(int i = 0; i < carreras.size(); i++){
+            JsonObject datosGP = carreras.get(i).getAsJsonObject();
+            listaFilas.add(new Rowitem_listaCarreras(datosGP.get("raceName").getAsString(),
+                    datosGP.get("date").getAsString(),datosGP.get("time").getAsString()));
         }
         return listaFilas;
     }
@@ -103,12 +100,13 @@ public class FragmentUltimaCarrera extends Fragment {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject respuesta = response.body();
-                List<Rowitem_clasificacionCarrera> filas = crearRowItems(respuesta);
+                List<Rowitem_listaCarreras> filas = crearRowItems(respuesta);
                 if (getActivity()!=null)
-                    adaptador = new RowArrayAdapter_clasificacionCarrera(getActivity(),
-                        R.layout.row_posicion_carrera, filas);
+                    adaptador = new RowArrayAdapter_listaCarreras(getActivity(),
+                            R.layout.row_lista_carreras, filas);
+
                 System.out.println(listView);
-                listView = (ListView) view.findViewById(R.id.listviewfr);
+                listView = (ListView) view.findViewById(R.id.listviewListaCarreras);
                 System.out.println(listView);
                 listView.setAdapter(adaptador);
 
