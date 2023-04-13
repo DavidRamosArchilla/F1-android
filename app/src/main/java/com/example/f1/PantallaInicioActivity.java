@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,12 +52,13 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentUltimaCarrera()).commit();
                         toolbar.setTitle("Última Carrera");
                         return true;
-                    case R.id.menu_frag_quiniela:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, quinielaFragment).commit();
-                        toolbar.setTitle("Quiniela");
                     case R.id.menu_frag_carreras:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentListaCarreras()).commit();
                         toolbar.setTitle("Carreras");
+                        return true;
+                    case R.id.menu_frag_quiniela:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, quinielaFragment).commit();
+                        toolbar.setTitle("Quiniela");
                         return true;
                 }
                 return false;
