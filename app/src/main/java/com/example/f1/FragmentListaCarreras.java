@@ -91,7 +91,8 @@ public class FragmentListaCarreras extends Fragment {
         for(int i = 0; i < carreras.size(); i++){
             JsonObject datosGP = carreras.get(i).getAsJsonObject();
             listaFilas.add(new Rowitem_listaCarreras(datosGP.get("raceName").getAsString(),
-                    datosGP.get("date").getAsString(),datosGP.get("time").getAsString()));
+                    datosGP.get("date").getAsString(),datosGP.get("time").getAsString(),
+                    datosGP.get("season").getAsString(),datosGP.get("round").getAsString()));
         }
         return listaFilas;
     }

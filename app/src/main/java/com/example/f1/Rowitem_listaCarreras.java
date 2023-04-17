@@ -8,14 +8,20 @@ public class Rowitem_listaCarreras {
     private String granPremio;
     private String fecha;
     private String hora;
+
+    private String year;
+
+    private String round;
     private int color;
 
 
-    public Rowitem_listaCarreras(String granPremio, String fecha, String hora) {
+    public Rowitem_listaCarreras(String granPremio, String fecha, String hora, String year, String round) {
         this.granPremio=granPremio;
         this.fecha=fecha;
         this.hora=hora;
         this.color=calcularColor();
+        this.year=year;
+        this.round=round;
     }
 
     public int getColor() {
