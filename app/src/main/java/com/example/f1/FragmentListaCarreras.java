@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,7 +16,10 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -108,8 +112,28 @@ public class FragmentListaCarreras extends Fragment {
 
                 System.out.println(listView);
                 listView = (ListView) view.findViewById(R.id.listviewListaCarreras);
-                System.out.println(listView);
                 listView.setAdapter(adaptador);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Rowitem_listaCarreras carrera = (Rowitem_listaCarreras) listView.getItemAtPosition(position);
+                        String date= carrera.getFecha();
+
+                        Date fechaActual=new Date();
+                        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                        Date fecha = null;
+                        try {
+                            fecha = formato.parse(date);
+                            if(fechaActual.compareTo(fecha)>0){
+                                String year= carrera.getYear();
+                                String round= carrera.getRound();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentCarrera(year, round)).commit();
+                            }
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
 
             }
             @Override

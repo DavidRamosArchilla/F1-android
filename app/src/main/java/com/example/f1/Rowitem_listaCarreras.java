@@ -24,6 +24,27 @@ public class Rowitem_listaCarreras {
         this.round=round;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getRound() {
+        return round;
+    }
+
+    public void setRound(String round) {
+        this.round = round;
+    }
+
+    public Rowitem_listaCarreras(String year, String round) {
+        this.year = year;
+        this.round = round;
+    }
+
     public int getColor() {
         return color;
     }

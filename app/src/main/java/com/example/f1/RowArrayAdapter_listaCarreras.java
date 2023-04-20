@@ -23,7 +23,6 @@ public class RowArrayAdapter_listaCarreras extends ArrayAdapter<Rowitem_listaCar
         TextView granPremio;
         TextView fecha;
         TextView hora;
-
         LinearLayout layout;
     }
 

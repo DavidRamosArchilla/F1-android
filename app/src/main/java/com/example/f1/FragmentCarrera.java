@@ -24,10 +24,10 @@ import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentUltimaCarrera#newInstance} factory method to
+ * Use the {@link FragmentCarrera#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentUltimaCarrera extends Fragment {
+public class FragmentCarrera extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,8 +38,15 @@ public class FragmentUltimaCarrera extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FragmentUltimaCarrera() {
+    private String year;
+    private String round;
+    public FragmentCarrera() {
         // Required empty public constructor
+    }
+
+    public FragmentCarrera(String year, String round) {
+        this.year=year;
+        this.round=round;
     }
 
     /**
@@ -51,8 +58,8 @@ public class FragmentUltimaCarrera extends Fragment {
      * @return A new instance of fragment ultimaCarrera.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentUltimaCarrera newInstance(String param1, String param2) {
-        FragmentUltimaCarrera fragment = new FragmentUltimaCarrera();
+    public static FragmentCarrera newInstance(String param1, String param2) {
+        FragmentCarrera fragment = new FragmentCarrera();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,7 +79,7 @@ public class FragmentUltimaCarrera extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         Callback<JsonObject> callback = crearCallback();
-        ((PantallaInicioActivity)getActivity()).getService().getLastRace().enqueue(callback);
+        ((PantallaInicioActivity)getActivity()).getService().getResultOfRace(year,round).enqueue(callback);
     }
 
     @Override
