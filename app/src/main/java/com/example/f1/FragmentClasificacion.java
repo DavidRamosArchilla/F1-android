@@ -94,7 +94,7 @@ public class FragmentClasificacion extends Fragment {
                 List<Rowitem_clasificacionCarrera> filas = crearRowItems(respuesta);
                 if (getActivity()!=null)
                     adaptador = new RowArrayAdapter_clasificacionCarrera(getActivity(),
-                            R.layout.row_lista_carreras, filas);
+                            R.layout.row_clasificacion, filas);
 
                 System.out.println(listView);
                 listView = (ListView) view.findViewById(R.id.listviewListaCarreras);
