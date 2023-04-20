@@ -20,6 +20,8 @@ public class RowArrayAdapter_clasificacionCarrera extends ArrayAdapter<Rowitem_c
     private class RowItemHolder {
         TextView piloto;
         TextView puntos;
+
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -40,7 +42,7 @@ public class RowArrayAdapter_clasificacionCarrera extends ArrayAdapter<Rowitem_c
 
 
         holder.piloto.setText(rowItem.getNombrePiloto());
-        holder.puntos.setText(String.valueOf(rowItem.getPutnos()));
+        holder.puntos.setText(String.valueOf(rowItem.getPuntos()));
 
         return convertView;
     }
