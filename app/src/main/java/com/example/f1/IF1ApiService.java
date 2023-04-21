@@ -18,7 +18,7 @@ public interface IF1ApiService {
     Call<JsonObject> getResultOfRace(@Path("year") String year, @Path("round") String round);
     @GET("/api/f1/{year}/{round}/qualifying.json")
     Call<JsonObject> getQualiOfRace(@Path("year") String year, @Path("round") String round);
-    @GET("/api/f1/{year}/driverStrandings.json")
+    @GET("/api/f1/{year}/driverStandings.json")
     Call<JsonObject> getStanding(@Path("year") String year);
 
     @GET("/api/f1/current/next/races.json")
