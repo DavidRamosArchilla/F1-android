@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ComprobarQuinielaListener implements ValueEventListener {
+    private final String nombreUsuario;
     private Context context;
     private JsonObject respuesta;
     private String idUsuario;
@@ -32,6 +33,7 @@ public class ComprobarQuinielaListener implements ValueEventListener {
         this.context = context;
         this.respuesta = respuesta;
         this.idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.nombreUsuario = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         this.fechaCarrera = fechaCarrera;
     }
     @Override
@@ -57,7 +59,8 @@ public class ComprobarQuinielaListener implements ValueEventListener {
     private void sumarPuntosDb(int puntosQuiniela) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/puntos");
         Map<String, Object> updates = new HashMap<>();
-        updates.put(idUsuario, ServerValue.increment(puntosQuiniela));
+        updates.put(idUsuario + "/puntos", ServerValue.increment(puntosQuiniela));
+        updates.put(idUsuario + "/nombre", nombreUsuario);
         mDatabase.updateChildren(updates);
     }
 

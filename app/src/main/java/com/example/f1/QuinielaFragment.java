@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -71,6 +73,8 @@ public class QuinielaFragment extends Fragment {
         FloatingActionButton btn = view.findViewById(R.id.subirQuiniela);
         comprobarUltimaCarrera();
         mostrarPuntos(view);
+        Button botonRanking = view.findViewById(R.id.buttonRanking);
+        botonRanking.setOnClickListener(new BotonRankingListener());
         btn.setOnClickListener(v -> {
             crearDialog((dialog, which) -> {
                 new Thread(() -> {
@@ -110,13 +114,17 @@ public class QuinielaFragment extends Fragment {
     }
 
     private void mostrarPuntos(View view) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("puntos/" + idUsuario);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("puntos/" + idUsuario + "/puntos");
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 TextView textViewPuntos = view.findViewById(R.id.textViewPuntosUsuario);
-                String puntos = "Puntos: " + String.valueOf(snapshot.getValue());
-                textViewPuntos.setText(puntos);
+                String puntos =  String.valueOf(snapshot.getValue());
+                if (puntos.equals("null")){
+                    puntos = "0";
+                }
+                String texto = "Puntos: " + puntos;
+                textViewPuntos.setText(texto);
             }
 
             @Override
