@@ -2,6 +2,7 @@ package com.example.f1;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -62,42 +63,54 @@ public class FragmentClasificacion extends Fragment {
 
     private View view;
 
-    private ArrayAdapter<Rowitem_clasificacionCarrera> adaptador;
+    private ArrayAdapter<Rowitem_Clasificacion> adaptador;
 
     private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        Callback<JsonObject> callback = crearCallback();
-        ((PantallaInicioActivity)getActivity()).getService().getStanding("current").enqueue(callback);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_clasificacion, container, false);
+
+        view = inflater.inflate(R.layout.fragment_clasificacion, container, false);
+        Callback<JsonObject> callback = crearCallback();
+        ((PantallaInicioActivity)getActivity()).getService().getStanding("current").enqueue(callback);
+        return view;
     }
 
-
+    private List<Rowitem_Clasificacion> crearRowItems(JsonObject respuesta) {
+        List<Rowitem_Clasificacion> listaFilas = new ArrayList<Rowitem_Clasificacion>();
+        JsonArray clasificacion = respuesta.getAsJsonObject("MRData")
+                .getAsJsonObject("StandingsTable")
+                .getAsJsonArray("StandingsLists")
+                .get(0).getAsJsonObject().getAsJsonArray("DriverStandings");
+        for(int i = 0; i < clasificacion.size(); i++){
+            JsonObject datosP = clasificacion.get(i).getAsJsonObject();
+            listaFilas.add(new Rowitem_Clasificacion(
+                    datosP.get("Driver").getAsJsonObject().get("familyName").getAsString(),
+                    datosP.get("points").getAsInt(),
+                    datosP.get("position").getAsInt()));
+        }
+        return listaFilas;
+    }
 
     private Callback<JsonObject> crearCallback(){
         return new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 JsonObject respuesta = response.body();
-                List<Rowitem_clasificacionCarrera> filas = crearRowItems(respuesta);
+                List<Rowitem_Clasificacion> filas = crearRowItems(respuesta);
                 if (getActivity()!=null)
-                    adaptador = new RowArrayAdapter_clasificacionCarrera(getActivity(),
+                    adaptador = new RowArrayAdapter_Clasificacion(getActivity(),
                             R.layout.row_clasificacion, filas);
 
                 System.out.println(listView);
-                listView = (ListView) view.findViewById(R.id.listviewListaCarreras);
+                listView = (ListView) view.findViewById(R.id.listviewClasificacion);
                 System.out.println(listView);
                 listView.setAdapter(adaptador);
 
@@ -112,20 +125,6 @@ public class FragmentClasificacion extends Fragment {
                 ).show();
             }
         };
-    }
-
-    private List<Rowitem_clasificacionCarrera> crearRowItems(JsonObject respuesta) {
-        List<Rowitem_clasificacionCarrera> listaFilas = new ArrayList<Rowitem_clasificacionCarrera>();
-        JsonArray clasificacion = respuesta.getAsJsonObject("MRData")
-                .getAsJsonObject("StandingsTable")
-                .getAsJsonArray("StandingsLists");
-        for(int i = 0; i < clasificacion.size(); i++){
-            JsonObject datosP = clasificacion.get(i).getAsJsonObject();
-            listaFilas.add(new Rowitem_clasificacionCarrera(
-                    datosP.get("DriverStandings.Driver.driverId").getAsString(),
-                    datosP.get("DriverStandings.points").getAsInt()));
-        }
-        return listaFilas;
     }
 }
 

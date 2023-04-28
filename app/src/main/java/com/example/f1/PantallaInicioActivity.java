@@ -38,6 +38,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         QuinielaFragment quinielaFragment = new QuinielaFragment();
+        FragmentClasificacion fragmentClasificacion = new FragmentClasificacion();
         getSupportFragmentManager().beginTransaction().add(R.id.frame1, new FragmentClasificacion()).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -45,7 +46,7 @@ public class PantallaInicioActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item){
                 switch(item.getItemId()){
                     case R.id.menu_frag_clasificacion:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentClasificacion()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, fragmentClasificacion).commit();
                         toolbar.setTitle("Clasificación");
                         return true;
                     case R.id.menu_frag_LogOut:
