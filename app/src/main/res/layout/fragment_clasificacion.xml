@@ -4,5 +4,13 @@
     android:id="@+id/fragment_ultimacarrera"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00D9FF"
-    tools:context=".FragmentClasificacion" />
+    android:background="@color/blanco_amarillento"
+    tools:context=".FragmentClasificacion">
+
+
+    <ListView
+        android:id="@+id/listviewClasificacion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
