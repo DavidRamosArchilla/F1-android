@@ -2,10 +2,7 @@ package com.example.f1;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class BotonRankingListener implements View.OnClickListener {
@@ -33,16 +32,15 @@ public class BotonRankingListener implements View.OnClickListener {
                 builderSingle.setTitle("Ranking de puntos");
                 Map<String, Map<String, Object>> puntosUsuarios = (Map<String, Map<String, Object>>)snapshot.getValue();
                 int indice = 0;
+                List<String> idsOrdenados = new ArrayList<>(puntosUsuarios.keySet());
+                Collections.sort(idsOrdenados,
+                        (x, y) -> ((Long)puntosUsuarios.get(y).get("puntos")).intValue() - ((Long)puntosUsuarios.get(x).get("puntos")).intValue());
                 String[] ranking = new String[puntosUsuarios.size()];
-                for (String idUsuario: puntosUsuarios.keySet()) {
+                for (String idUsuario: idsOrdenados) {
                     Map<String, Object> datosUsuario = puntosUsuarios.get(idUsuario);
                     String nombre = String.valueOf(datosUsuario.get("nombre"));
                     String puntos = String.valueOf(datosUsuario.get("puntos"));
                     ranking[indice] = nombre + ": " + puntos;
-                    Log.i("tag hashmap ", idUsuario + "     " + String.valueOf(puntosUsuarios.get(idUsuario)));
-                    Log.i("user", datosUsuario.toString() + "    " + puntosUsuarios.get(idUsuario).getClass());
-                    Log.i("valores: ", nombre + "  " + puntos);
-                    Log.i("asd ", ranking[indice]);
                     indice++;
                 }
                 builderSingle.setItems(ranking, (dialog, which) -> {});
@@ -60,7 +58,5 @@ public class BotonRankingListener implements View.OnClickListener {
 
             }
         });
-
-
     }
 }
