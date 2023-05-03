@@ -41,7 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class QuinielaFragment extends Fragment {
-    private List<Rowitem_clasificacionCarrera> listaPilotos;
+    private List<Rowitem_Clasificacion> listaPilotos;
     private RecyclerView recyclerView;
     private String idUsuario;
 
@@ -219,14 +219,14 @@ public class QuinielaFragment extends Fragment {
             }
         };
     }
-    private List<Rowitem_clasificacionCarrera> crearRowItems(JsonObject respuesta) {
-        List<Rowitem_clasificacionCarrera> listaFilas = new ArrayList<Rowitem_clasificacionCarrera>();
+    private List<Rowitem_Clasificacion> crearRowItems(JsonObject respuesta) {
+        List<Rowitem_Clasificacion> listaFilas = new ArrayList<Rowitem_Clasificacion>();
         JsonArray pilotos = respuesta.getAsJsonObject("MRData")
                 .getAsJsonObject("DriverTable")
                 .getAsJsonArray("Drivers");
         for(int i = 0; i < pilotos.size(); i++){
             JsonObject piloto = pilotos.get(i).getAsJsonObject();
-            listaFilas.add(new Rowitem_clasificacionCarrera(piloto.get("familyName").getAsString(),
+            listaFilas.add(new Rowitem_Clasificacion(piloto.get("familyName").getAsString(),
                     piloto.get("permanentNumber").getAsInt()));
         }
         return listaFilas;

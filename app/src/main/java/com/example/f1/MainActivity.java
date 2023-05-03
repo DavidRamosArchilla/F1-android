@@ -2,6 +2,7 @@ package com.example.f1;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.PendingIntent;
 import android.content.Intent;

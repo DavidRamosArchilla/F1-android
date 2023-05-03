@@ -68,7 +68,7 @@ public class FragmentCarrera extends Fragment {
     }
 
     private View view;
-    private ArrayAdapter<Rowitem_clasificacionCarrera> adaptador;
+    private ArrayAdapter<Rowitem_Clasificacion> adaptador;
     private ListView listView;
 
     @Override
@@ -90,8 +90,8 @@ public class FragmentCarrera extends Fragment {
         return view;
     }
 
-    private List<Rowitem_clasificacionCarrera> crearRowItems(JsonObject respuesta) {
-        List<Rowitem_clasificacionCarrera> listaFilas = new ArrayList<Rowitem_clasificacionCarrera>();
+    private List<Rowitem_Clasificacion> crearRowItems(JsonObject respuesta) {
+        List<Rowitem_Clasificacion> listaFilas = new ArrayList<Rowitem_Clasificacion>();
         JsonObject carrera = respuesta.getAsJsonObject("MRData")
                 .getAsJsonObject("RaceTable")
                 .getAsJsonArray("Races")
@@ -111,8 +111,8 @@ public class FragmentCarrera extends Fragment {
         for(int i = 0; i < resultados.size(); i++){
             JsonObject piloto = resultados.get(i).getAsJsonObject();
             JsonObject datosPiloto = piloto.get("Driver").getAsJsonObject();
-            listaFilas.add(new Rowitem_clasificacionCarrera(datosPiloto.get("familyName").getAsString(),
-                    piloto.get("points").getAsInt()));
+            listaFilas.add(new Rowitem_Clasificacion(datosPiloto.get("familyName").getAsString(),
+                    piloto.get("points").getAsInt(), piloto.get("position").getAsInt()));
         }
         return listaFilas;
     }
@@ -121,10 +121,10 @@ public class FragmentCarrera extends Fragment {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject respuesta = response.body();
-                List<Rowitem_clasificacionCarrera> filas = crearRowItems(respuesta);
+                List<Rowitem_Clasificacion> filas = crearRowItems(respuesta);
                 if (getActivity()!=null)
-                    adaptador = new RowArrayAdapter_clasificacionCarrera(getActivity(),
-                        R.layout.row_posicion_carrera, filas);
+                    adaptador = new RowArrayAdapter_Clasificacion(getActivity(),
+                        R.layout.row_clasificacion, filas);
                 System.out.println(listView);
                 listView = (ListView) view.findViewById(R.id.listviewfr);
                 System.out.println(listView);
