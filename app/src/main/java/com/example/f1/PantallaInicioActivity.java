@@ -39,6 +39,8 @@ public class PantallaInicioActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         QuinielaFragment quinielaFragment = new QuinielaFragment();
         FragmentClasificacion fragmentClasificacion = new FragmentClasificacion();
+        FragmentListaCarreras listaCarreras = new FragmentListaCarreras();
+        FragmentUltimaCarrera ultimaCarrera = new FragmentUltimaCarrera();
         getSupportFragmentManager().beginTransaction().add(R.id.frame1, new FragmentClasificacion()).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -49,12 +51,12 @@ public class PantallaInicioActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, fragmentClasificacion).commit();
                         toolbar.setTitle("Clasificación");
                         return true;
-                    case R.id.menu_frag_LogOut:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentUltimaCarrera()).commit();
+                    case R.id.menu_frag_ultima_carrera:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, ultimaCarrera).commit();
                         toolbar.setTitle("Última Carrera");
                         return true;
                     case R.id.menu_frag_carreras:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new FragmentListaCarreras()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, listaCarreras).commit();
                         toolbar.setTitle("Carreras");
                         return true;
                     case R.id.menu_frag_quiniela:
