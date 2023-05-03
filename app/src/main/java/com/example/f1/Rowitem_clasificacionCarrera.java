@@ -2,11 +2,12 @@ package com.example.f1;
 
 public class Rowitem_clasificacionCarrera {
     private String nombrePiloto;
-    private int putnos;
+    private int puntos;
 
     public Rowitem_clasificacionCarrera(String nombrePiloto, int putnos) {
         this.nombrePiloto = nombrePiloto;
-        this.putnos = putnos;
+        this.puntos = putnos;
+
     }
 
     public String getNombrePiloto() {
@@ -17,12 +18,12 @@ public class Rowitem_clasificacionCarrera {
         this.nombrePiloto = nombrePiloto;
     }
 
-    public int getPutnos() {
-        return putnos;
+    public int getPuntos() {
+        return puntos;
     }
 
-    public void setPutnos(int putnos) {
-        this.putnos = putnos;
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
     }
 
 
