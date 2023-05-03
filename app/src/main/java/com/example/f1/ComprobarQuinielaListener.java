@@ -22,16 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 public class ComprobarQuinielaListener implements ValueEventListener {
+    private final String nombreUsuario;
     private Context context;
     private JsonObject respuesta;
     private String idUsuario;
     private String fechaCarrera;
-    private final int PUNTUACION_MAXIMA = 400;
-    private final int PUNTUACION_MINIMA = 200;
+
     public ComprobarQuinielaListener(Context context, JsonObject respuesta, String fechaCarrera){
         this.context = context;
         this.respuesta = respuesta;
         this.idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.nombreUsuario = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         this.fechaCarrera = fechaCarrera;
     }
     @Override
@@ -57,7 +58,8 @@ public class ComprobarQuinielaListener implements ValueEventListener {
     private void sumarPuntosDb(int puntosQuiniela) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("/puntos");
         Map<String, Object> updates = new HashMap<>();
-        updates.put(idUsuario, ServerValue.increment(puntosQuiniela));
+        updates.put(idUsuario + "/puntos", ServerValue.increment(puntosQuiniela));
+        updates.put(idUsuario + "/nombre", nombreUsuario);
         mDatabase.updateChildren(updates);
     }
 
@@ -67,6 +69,8 @@ public class ComprobarQuinielaListener implements ValueEventListener {
         for(int i=0; i<resultadosCarrera.size(); i++){
             error += Math.abs(i - resultadosCarrera.indexOf(quiniela.get(i)));
         }
+        int PUNTUACION_MAXIMA = 400;
+        int PUNTUACION_MINIMA = 200;
         return PUNTUACION_MAXIMA - PUNTUACION_MINIMA - error;
     }
 
