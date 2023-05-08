@@ -1,5 +1,7 @@
 package com.example.f1;
 
+import android.graphics.Color;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +16,9 @@ public class Rowitem_listaCarreras {
     private String round;
     private int color;
 
+  //  private final Color colorSecondaryVariant = com.google.android.material.R.color.design_default_color_secondary_variant;
+
+    //private final int aux = colorSecondaryVariant.toArgb();
 
     public Rowitem_listaCarreras(String granPremio, String fecha, String hora, String year, String round) {
         this.granPremio=granPremio;
@@ -59,12 +64,12 @@ public class Rowitem_listaCarreras {
         try {
             Date fechaGP = formato.parse(getFecha());
             if(fechaActual.compareTo(fechaGP)>0){
-                return 0xFFFFFFFF;
+                return 0xFF505050;
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return 0xFFD5D5D5;
+        return 0xFF808080;
     }
 
     public String getGranPremio() {

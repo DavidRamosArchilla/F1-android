@@ -11,4 +11,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="verde_astonMartin">#FF0A5A4F</color>
     <color name="blanco_amarillento">#FFFEFEF0</color>
+    <color name="grey">#FF505050</color>
+    <color name="grey_listaCarreras">#FF808080</color>
+
+
 </resources>

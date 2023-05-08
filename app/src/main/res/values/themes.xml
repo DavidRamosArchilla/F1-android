@@ -6,12 +6,13 @@
         <item name="colorPrimaryVariant">@color/verde_astonMartin</item>
         <item name="colorOnPrimary">@color/blanco_amarillento</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/blanco_amarillento</item>
+        <item name="colorSecondaryVariant">@color/grey_listaCarreras</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:colorBackground">@color/verde_astonMartin</item>
     </style>
     <style name="Theme.F1.NoActionBar">
         <item name="windowActionBar">false</item>
