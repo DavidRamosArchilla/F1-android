@@ -48,7 +48,7 @@ public class RowArrayAdapter_listaCarreras extends ArrayAdapter<Rowitem_listaCar
         holder.granPremio.setText(rowItem.getGranPremio());
         holder.fecha.setText(rowItem.getFecha());
         holder.hora.setText(rowItem.getHora());
-        holder.layout.setBackgroundColor(rowItem.getColor());
+        holder.layout.setBackgroundColor(rowItem.getColor(context));
 
         return convertView;
     }

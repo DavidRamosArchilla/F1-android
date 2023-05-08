@@ -1,6 +1,11 @@
 package com.example.f1;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.TypedValue;
+
+import androidx.annotation.ColorInt;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,7 +19,7 @@ public class Rowitem_listaCarreras {
     private String year;
 
     private String round;
-    private int color;
+
 
   //  private final Color colorSecondaryVariant = com.google.android.material.R.color.design_default_color_secondary_variant;
 
@@ -24,7 +29,6 @@ public class Rowitem_listaCarreras {
         this.granPremio=granPremio;
         this.fecha=fecha;
         this.hora=hora;
-        this.color=calcularColor();
         this.year=year;
         this.round=round;
     }
@@ -50,26 +54,33 @@ public class Rowitem_listaCarreras {
         this.round = round;
     }
 
-    public int getColor() {
-        return color;
+    public int getColor(Context context) {
+        return calcularColor(context);
     }
 
-    public void setColor(int color) {
-        this.color = color;
-    }
+//    public void setColor(int color) {
+//        this.color = color;
+//    }
 
-    private int calcularColor() {
+    private int calcularColor(Context context) {
         Date fechaActual=new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date fechaGP = formato.parse(getFecha());
             if(fechaActual.compareTo(fechaGP)>0){
-                return 0xFF505050;
+                TypedValue typedValue = new TypedValue();
+                context.getTheme().resolveAttribute(R.attr.colorSecondary, typedValue, true);
+                @ColorInt int color = typedValue.data;
+                return color;
+
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return 0xFF808080;
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorSecondaryVariant, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        return color;
     }
 
     public String getGranPremio() {
