@@ -50,7 +50,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-//            Toast.makeText(view.getContext(), moviesList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
         }
         public void cambiarIndice(int posicion){
             numeroTextView.setText(String.valueOf(posicion + 1));

@@ -19,23 +19,9 @@ public class Rowitem_Clasificacion {
     public String getNombrePiloto() {
         return nombrePiloto;
     }
-
-    public void setNombrePiloto(String nombrePiloto) {
-        this.nombrePiloto = nombrePiloto;
-    }
-
     public int getPuntos() {
         return puntos;
     }
-
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
-    }
-
-    public void setPos(int pos) {
-        this.pos = pos;
-    }
-
     public int getPos() {
         return pos;
     }

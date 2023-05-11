@@ -27,7 +27,6 @@ public class RowArrayAdapter_Clasificacion extends ArrayAdapter<Rowitem_Clasific
 
         TextView puesto;
 
-        LinearLayout layout;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
