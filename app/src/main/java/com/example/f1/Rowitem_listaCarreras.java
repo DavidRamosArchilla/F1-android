@@ -7,6 +7,8 @@ import android.util.TypedValue;
 
 import androidx.annotation.ColorInt;
 
+import android.graphics.Color;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +26,8 @@ public class Rowitem_listaCarreras {
   //  private final Color colorSecondaryVariant = com.google.android.material.R.color.design_default_color_secondary_variant;
 
     //private final int aux = colorSecondaryVariant.toArgb();
+
+
 
     public Rowitem_listaCarreras(String granPremio, String fecha, String hora, String year, String round) {
         this.granPremio=granPremio;
