@@ -7,7 +7,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?colorSecondary"
+        >
 
         <!-- First TextView -->
         <TextView
@@ -34,12 +36,3 @@
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
-
-    <!--        android:textSize="14sp"-->
-    <!-- Button -->
-    <!--    <Button-->
-    <!--        android:id="@+id/boton_drag"-->
-    <!--        android:layout_width="50dp"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        android:layout_alignParentRight="true"-->
-    <!--        android:text="X" />-->

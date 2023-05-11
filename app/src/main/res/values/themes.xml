@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/blanco_amarillento</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blanco_amarillento</item>
-        <item name="colorSecondaryVariant">@color/grey_listaCarreras</item>
+        <item name="colorSecondaryVariant">@color/amarillo_noseleccionado</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
