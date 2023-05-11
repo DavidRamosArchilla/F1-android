@@ -8,6 +8,7 @@
         android:id="@+id/textViewPuesto"
         android:layout_width="27dp"
         android:layout_height="27dp"
+        android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:text="Puesto"
         android:textSize="20sp" />

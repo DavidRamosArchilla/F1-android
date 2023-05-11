@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,12 @@ public class FragmentCarrera extends Fragment {
         String circuit = carrera.get("raceName").getAsString();
         String date = carrera.get("date").getAsString();
         String time = carrera.get("time").getAsString();
+
+        //Cargar imagen
+        String imageUri = ImagenesCircuitos.getImage(circuit);
+        ImageView ivBasicImage = (ImageView) view.findViewById(R.id.circuitImage);
+        Picasso.with(getActivity()).load(imageUri).into(ivBasicImage);
+
 
         TextView TVCircuit = (TextView) view.findViewById(R.id.textViewGranPremio);
         TVCircuit.setText(circuit);
