@@ -23,11 +23,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentClasificacion#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentClasificacion extends Fragment {
     public FragmentClasificacion() {
         // Required empty public constructor
